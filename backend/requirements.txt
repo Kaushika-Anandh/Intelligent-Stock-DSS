@@ -1,0 +1,4 @@
+Flask
+PyJWT
+firebase-admin
+flask-cors
