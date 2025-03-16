@@ -1,0 +1,18 @@
+/* // src/components/Questionnaire.css */
+.questionnaire-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .loading, .error {
+    text-align: center;
+    padding: 40px;
+    font-size: 18px;
+  }
+  
+  .error {
+    color: #d9534f;
+  }
+  
+  

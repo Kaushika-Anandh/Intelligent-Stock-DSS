@@ -1,4 +1,5 @@
 backend/firebase_config.json
+backend/storage
 frontend/src/components/firebase_config.js
 backend/.key
 backend/venv

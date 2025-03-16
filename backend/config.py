@@ -8,7 +8,7 @@ class Config:
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'postgresql://username:password@localhost/yourdbname'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-NEWS_SUMMARY_SYSTEM_PROMPT="""You are an AI assistant that help user to summarize long content"""
+NEWS_SUMMARY_SYSTEM_PROMPT="""You are an AI assistant that help user to summarize long content."""
 NEWS_SUMMARY_USER_PROMPT="""Given few description about stock market news, Understand all the news and summarize the content with all the essential details.
 You are also given a list of insights based on the stock news. These insights contains stock ticker and coressponding sentiment about the news.
 There is also reason for the sentiment. Understand the news description, insights and summarize the content. *Make it crisp*, *DO NOT ADD ANY NEW CONTENT*.

@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
+import "./css/UserLogs.css"
 
 const UserLogContainer = () => {
   const [activity, setActivity] = useState('BUY'); // Default option

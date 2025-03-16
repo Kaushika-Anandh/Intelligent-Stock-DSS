@@ -3,7 +3,7 @@ from flask_cors import CORS # type: ignore
 from config import Config
 from models import db 
 from routes import auth_bp, table_bp, questions_bp, portfolio_bp, userlogs_bp
-
+from followup_routes import followup_bp
 app = Flask(__name__)
 app.config.from_object(Config)
 CORS(app)
@@ -19,6 +19,7 @@ app.register_blueprint(table_bp)
 app.register_blueprint(questions_bp, url_prefix=API_PREFIX)
 app.register_blueprint(portfolio_bp, url_prefix=API_PREFIX)
 app.register_blueprint(userlogs_bp, url_prefix=API_PREFIX)
+app.register_blueprint(followup_bp, url_prefix=API_PREFIX)
 
 
 if __name__ == '__main__':

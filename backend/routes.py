@@ -4,7 +4,7 @@ from models import db, User, FolioQuestion, UserLog
 from sqlalchemy import MetaData, inspect # type: ignore
 import os
 import requests
-
+from llm_pipeline import get_desc_insights, chat_groq
 auth_bp = Blueprint('auth_bp', __name__)
 table_bp = Blueprint('table_bp', __name__)
 questions_bp = Blueprint('questions_bp', __name__)
@@ -392,20 +392,15 @@ def get_user_logs():
     except Exception as e:
         return jsonify({"error": f"Error retrieving logs: {str(e)}"}), 500
 
-@userlogs_bp.route('/news/sentiment/<ticker>', methods=['GET'])
+@userlogs_bp.route('/news/sentiment-analysis/<ticker>', methods=['GET'])
 def get_ticker_news_sentiment(ticker):
-
-    API_KEY = os.environ.get('SECRET_KEY')
-    url = f"https://api.polygon.io/v2/reference/news?ticker={ticker}&limit=3&apiKey={API_KEY}"
     try:
-        response = requests.get(url)
-        if response.status_code != 200:
-            return jsonify({"error": f"Error retrieving stock news: {str(e)}"}), 500
-        news_desc_insights = []
-        news_link = []
-        for result in response.json()["results"]:
-            news_desc_insights.append({"desc":result["description"], "insight":result["insights"]})
-            news_link.append(result["article_url"])
+        output = get_desc_insights(ticker=ticker)
+        if output:
+            descriptions, news_insights, news_links = output
+            llm_response = chat_groq(description=descriptions, insights=news_insights) 
+            return jsonify({"llm_response":llm_response, "news_links":news_links}), 200
         
+        return jsonify({"error": "Error retrieving stock news:"}), 500
     except Exception as e:
         return jsonify({"error": f"Error retrieving stock news: {str(e)}"}), 500

@@ -1,42 +1,48 @@
-// src/components/Home.js
 import React, { useEffect, useState } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
-  const [isNewUser, setIsNewUser] = useState(false);
+  const [isNewUser, setIsNewUser] = useState(null); // null until determined
   const navigate = useNavigate();
 
+  // Decode token and determine if the user is new
   useEffect(() => {
     const token = localStorage.getItem('jwt_token');
-    console.log(token);
     if (token) {
       try {
         const decoded = jwtDecode(token);
-        console.log(decoded);
         setIsNewUser(decoded.user.is_new);
       } catch (error) {
         console.error('Invalid token:', error);
       }
     }
   }, []);
-  
+
+  // Redirect non-new users once we know the value
+  useEffect(() => {
+    if (isNewUser === false) {
+      navigate('/dashboard');
+    }
+  }, [isNewUser, navigate]);
+
   const handleProceed = () => {
-    // Logic to navigate to the onboarding process
     navigate('/onboarding');
   };
-  
+
+  // Render a loading state until the token is decoded
+  if (isNewUser === null) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div>
       <h1>Welcome To Monte</h1>
-      {console.log("is new user in webpage: "+isNewUser)}
-      {isNewUser ? (
+      {isNewUser && (
         <div>
-          <p>Go to on boarding process</p>
+          <p>Go to onboarding process</p>
           <button onClick={handleProceed}>Proceed</button>
         </div>
-      ) : (
-        navigate('/dashboard')
       )}
     </div>
   );

@@ -1,0 +1,112 @@
+/* login.css */
+
+/* Basic reset */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Page background + centering the card */
+  .login-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    height: 100vh;
+    background-color: #f6f7fb; /* Subtle background color */
+  }
+  
+  /* The "card" that holds both the image and form */
+  .login-card {
+    display: flex;
+    width: 90%;
+    max-width: 1000px;          /* Adjust as needed */
+    background-color: #fff;
+    border-radius: 10px;        /* Rounded corners */
+    overflow: hidden;           /* Ensures image corners are clipped */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Soft shadow */
+  }
+  
+  /* Left side: image section */
+  .image-section {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f6f7fb; /* Or use white if you prefer */
+    position: relative;
+  }
+  
+  .image-section img {
+    width: 80%;
+    max-width: 400px;
+    object-fit: cover;
+    transition: transform 0.15s ease; /* Smooth subtle movement */
+  }
+  
+  /* Right side: form section */
+  .form-section {
+    flex: 1;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+  }
+  
+  /* "Sign Up" button in the top right corner */
+  .form-header {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+  }
+  
+  .signup-button {
+    border: none;
+    background-color: transparent;
+    color: #666;
+    cursor: pointer;
+    font-size: 16px;
+    transition: color 0.3s ease;
+  }
+  
+  .signup-button:hover {
+    color: #333;
+  }
+  
+  /* Headings and paragraph text */
+  .form-section h1 {
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+    color: #2c3e50;
+  }
+  
+  .form-section p {
+    margin-bottom: 1.5rem;
+    color: #666;
+  }
+  
+  .form-section h2 {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    color: #4f4f4f;
+  }
+  
+  /* Button styling */
+  .form-section button {
+    background-color: #4caf50;
+    color: white;
+    padding: 12px 20px;
+    margin-top: 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .form-section button:hover {
+    background-color: #45a049;
+  }
+  

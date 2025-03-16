@@ -1,0 +1,81 @@
+/* // src/components/Results.css */
+.results-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.results-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.results-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.results-section {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 24px;
+}
+
+.profile-name {
+  font-size: 24px;
+  font-weight: 600;
+  color: #1890ff;
+  margin-bottom: 12px;
+}
+
+.profile-description {
+  line-height: 1.6;
+  color: #333;
+}
+
+.category-score {
+  margin-bottom: 16px;
+}
+
+.category-name {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.score-bar-container {
+  display: flex;
+  align-items: center;
+  height: 20px;
+}
+
+.score-bar {
+  height: 100%;
+  background-color: #1890ff;
+  border-radius: 2px;
+}
+
+.score-value {
+  margin-left: 12px;
+  font-weight: 600;
+}
+
+.results-footer {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.results-footer button {
+  padding: 12px 24px;
+  background-color: #1890ff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+}
+button{
+    margin: 10px;
+}

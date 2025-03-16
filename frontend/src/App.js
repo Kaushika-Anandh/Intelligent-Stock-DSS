@@ -4,8 +4,10 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Login from './components/Login';
 import Home from './components/Home';
 import PrivateRoute from './components/PrivateRoute';
-import Onboarding from './components/onBoarding';
+// import Onboarding from './components/onBoarding';
 import Dashboard from './components/Dashboard';
+import Questionnaire from './components/questionnaire';
+import Results from './components/result';
 
 function App() {
   return (
@@ -24,7 +26,7 @@ function App() {
           path="/onboarding" 
           element={
             <PrivateRoute>
-              <Onboarding />
+              <Questionnaire />
             </PrivateRoute>
           }
         />
@@ -33,6 +35,14 @@ function App() {
           element={
             <PrivateRoute>
               <Dashboard />
+            </PrivateRoute>
+          }
+        />
+        <Route 
+          path="/results/:profileId" 
+          element={
+            <PrivateRoute>
+              <Results />
             </PrivateRoute>
           }
         />
