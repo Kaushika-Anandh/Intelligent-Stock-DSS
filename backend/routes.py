@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify # type: ignore
 from auth import verify_firebase_token, create_jwt, decode_jwt
 from models import db, User, FolioQuestion, UserLog
 from sqlalchemy import MetaData, inspect # type: ignore
@@ -404,3 +404,4 @@ def get_ticker_news_sentiment(ticker):
         return jsonify({"error": "Error retrieving stock news:"}), 500
     except Exception as e:
         return jsonify({"error": f"Error retrieving stock news: {str(e)}"}), 500
+    

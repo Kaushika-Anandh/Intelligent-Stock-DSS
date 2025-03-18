@@ -2,3 +2,8 @@ Flask
 PyJWT
 firebase-admin
 flask-cors
+langchain_groq
+langchain_core
+flask_sqlalchemy
+groq
+

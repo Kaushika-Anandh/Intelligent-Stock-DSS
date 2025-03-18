@@ -2,7 +2,7 @@ import firebase_admin # type: ignore
 from firebase_admin import credentials, auth as firebase_auth # type: ignore
 import jwt # type: ignore
 from datetime import datetime, timedelta, timezone
-from flask import current_app
+from flask import current_app #type: ignore
 import json
 
 # Initialize Firebase Admin SDK
