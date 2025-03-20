@@ -10,6 +10,7 @@ table_bp = Blueprint('table_bp', __name__)
 questions_bp = Blueprint('questions_bp', __name__)
 portfolio_bp = Blueprint("portfolio_bp", __name__)
 userlogs_bp = Blueprint("userlogs_bp", __name__)
+suggestions_bp = Blueprint("suggestions_bp", __name__)
 
 @auth_bp.route('/login', methods=['POST'])
 def login():
@@ -404,4 +405,3 @@ def get_ticker_news_sentiment(ticker):
         return jsonify({"error": "Error retrieving stock news:"}), 500
     except Exception as e:
         return jsonify({"error": f"Error retrieving stock news: {str(e)}"}), 500
-    

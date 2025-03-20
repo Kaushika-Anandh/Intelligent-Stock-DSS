@@ -1,5 +1,5 @@
 # app.py (Flask backend)
-from flask import request, jsonify, Blueprint
+from flask import request, jsonify, Blueprint 
 import os
 import json
 import time
@@ -99,6 +99,7 @@ SCORING_WEIGHTS = {
 # Utility Functions
 def calculate_average(scores):
     """Calculate the average score for a category."""
+    print("scores",scores)
     return round(statistics.mean(scores), 2) if scores else 0
 
 def apply_weighting(scores):
@@ -205,6 +206,7 @@ def get_questions():
 def submit_answer():
     """Process a user's answer and determine if follow-up is needed."""
     data = request.json
+    print("data",data)
     
     # Extract data from request
     category = data.get('category')
@@ -213,6 +215,7 @@ def submit_answer():
     score = data.get('score')
     response_history = data.get('response_history', [])
     extreme_answer_count = data.get('extreme_answer_count', 0)
+    category_scores = data.get('category_scores', {})
     
     # Add response to history
     response_data = {
@@ -235,13 +238,15 @@ def submit_answer():
         "response_history": response_history,
         "extreme_answer_count": extreme_answer_count
     }
-    
+    if category not in category_scores:
+        category_scores[category] = [score]
+    else:
+        category_scores[category].append(score)
+
     if is_last_question:
         # Calculate category score
-        category_scores = data.get('category_scores', {})
         if category not in category_scores:
             category_scores[category] = []
-        category_scores[category].append(score)
         category_score = calculate_average(category_scores[category])
         
         # Check for ambiguity
@@ -285,8 +290,8 @@ def submit_answer():
         else:
             result["needs_followup"] = False
             
-        result["category_scores"] = category_scores
-    
+    result["category_scores"] = category_scores
+     
     return jsonify(result)
 
 @followup_bp.route('/submit_followup', methods=['POST'])
@@ -335,7 +340,7 @@ def calculate_profile():
     weighted_scores = apply_weighting(avg_category_scores)
     
     # Calculate final score
-    final_score = calculate_final_score(weighted_scores, followup_confidence)
+    final_score = sum(weighted_scores.values()) * (0.8 + followup_confidence)
     
     # Determine risk profile
     profile_name, profile_desc = get_risk_profile(final_score)
@@ -344,10 +349,11 @@ def calculate_profile():
     profile_data = {
         "category_scores": avg_category_scores,
         "weighted_scores": weighted_scores,
-        "final_score": final_score,
+        "final_score": round(final_score, 2),
         "risk_profile": profile_name,
         "profile_description": profile_desc,
-        "responses": user_responses
+        "responses": user_responses,
+        "followup_confidence": followup_confidence
     }
     
     # Save profile to storage
@@ -362,6 +368,7 @@ def calculate_profile():
         "profile_id": user_id,
         "profile_data": profile_data
     })
+
 @followup_bp.route('/profile/<profile_id>', methods=['GET'])
 def get_profile(profile_id):
     """Get a profile by ID."""

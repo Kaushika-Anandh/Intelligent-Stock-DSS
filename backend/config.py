@@ -21,3 +21,23 @@ The output should be in JSON format. This output should strictly follow this str
     "Description_summary": "...summary...",
     "Insight_summary": "...summary..."
 }}"""
+
+SUGGESTION_SYSTEM_PROMPT = "You are a personal financial analyst providing suggestion for the user's portfolio."
+SUGGESTION_CONTEXT_PROMPT = """Act as a financial analyst. The user showed ambiguity in {category} through: {context}. 
+        Generate 2-3 MCQs to clarify their true preferences. 
+        Focus on {specific_subaspect} based on their pattern: {pattern_details}. 
+        Context: User answered '{last_answer}' (score {last_score}) to the question: '{last_question}'. 
+        Pattern detected: {pattern}. Focus on clarifying: {aspect_to_clarify}. 
+        Return **only** a JSON object in the following format:\n
+        ```\n
+        {{ \"follow_up_questions\": [\n
+           {{\"question\": \"Your question here\", \"options\": [\n
+              {{\"option\": \"Choice 1\", \"score\": 5}},\n
+              {{\"option\": \"Choice 2\", \"score\": 3}},\n
+              {{\"option\": \"Choice 3\", \"score\": 1}},\n
+              {{\"option\": \"Choice 4\", \"score\": 0}}\n
+           ]}}\n"
+         ]}}\n"
+        ```
+        Do **not** include any explanations, text, or extra characters outside the JSON format.
+"""

@@ -1,6 +1,8 @@
 import requests, json, os
 from groq import Groq # type: ignore
-from config import NEWS_SUMMARY_USER_PROMPT, NEWS_SUMMARY_SYSTEM_PROMPT
+from config import NEWS_SUMMARY_USER_PROMPT, NEWS_SUMMARY_SYSTEM_PROMPT, SUGGESTION_CONTEXT_PROMPT, SUGGESTION_SYSTEM_PROMPT
+from langchain_groq import ChatGroq # type: ignore
+from langchain_core.prompts import ChatPromptTemplate # type: ignore
 
 def get_desc_insights(ticker):
 
@@ -45,3 +47,4 @@ def chat_groq(description, insights):
         return json.loads(llm_response_json)
     except Exception as e:
         print(e)
+
