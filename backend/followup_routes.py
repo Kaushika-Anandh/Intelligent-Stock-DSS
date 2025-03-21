@@ -4,6 +4,7 @@ import os
 import json
 import time
 import statistics
+from models import db, User
 from langchain_groq import ChatGroq # type: ignore
 from langchain_core.prompts import ChatPromptTemplate # type: ignore
 from flask_cors import CORS # type: ignore
@@ -327,7 +328,9 @@ def submit_followup():
 def calculate_profile():
     """Calculate final risk profile based on all responses."""
     data = request.json
-    
+    user_data = request.get_json()
+    email = user_data.get('email')
+
     # Extract data
     category_scores = data.get('category_scores', {})
     followup_confidence = data.get('followup_confidence', 0)
@@ -356,38 +359,33 @@ def calculate_profile():
         "followup_confidence": followup_confidence
     }
     
-    # Save profile to storage
-    user_id = str(int(time.time()))
-    try:
-        with open(f"storage/user_profiles/{user_id}.json", "w") as f:
-            json.dump(profile_data, f, indent=2)
-    except Exception as e:
-        print(f"Error saving profile: {e}")
-    
-    return jsonify({
-        "profile_id": user_id,
-        "profile_data": profile_data
-    })
+    # Save profile to db
+    if not email:
+        return jsonify({"error": "Email is required."}), 400
 
-@followup_bp.route('/profile/<profile_id>', methods=['GET'])
-def get_profile(profile_id):
+    user = User.query.filter_by(email=email).first()
+    if not user:
+        return jsonify({"error": "User not found."}), 404
+
+    user.user_profile = profile_data
+    db.session.commit()
+
+    return jsonify({"message": "Profile updated successfully."}), 200
+
+@followup_bp.route('/user/user-profile', methods=['GET'])
+def get_profile():
     """Get a profile by ID."""
-    try:
-        # Validate profile_id format
-        if not profile_id.isdigit():
-            return jsonify({"error": "Invalid profile ID format"}), 400
-        
-        filepath = f"storage/user_profiles/{profile_id}.json"
-        
-        if not os.path.exists(filepath):
-            return jsonify({"error": "Profile not found"}), 404
-            
-        with open(filepath, "r") as f:
-            profile_data = json.load(f)
-            
-        return jsonify({
-            "profile_id": profile_id,
-            "profile_data": profile_data
-        })
-    except Exception as e:
-        return jsonify({"error": f"Error retrieving profile: {str(e)}"}), 500
+    print("request:",request.args)
+    email = request.args.get('email')
+    
+    if not email:
+        return jsonify({"error": "email is required."}), 400
+    user = User.query.filter_by(email=email).first()
+    if not user:
+        return jsonify({"error": "user not found."}), 404
+
+    if user.user_profile is None:
+        return jsonify({"error": "user profile not found."}), 404
+    else:
+        return jsonify({"profile_data": user.user_profile}), 200
+    

@@ -39,7 +39,7 @@ function App() {
           }
         />
         <Route 
-          path="/results/:profileId" 
+          path="/results" 
           element={
             <PrivateRoute>
               <Results />

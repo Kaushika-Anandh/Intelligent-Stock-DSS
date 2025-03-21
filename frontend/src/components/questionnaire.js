@@ -4,6 +4,7 @@ import axios from 'axios';
 import ProgressBar from './ProgressBar';
 import Question from './questions';
 import FollowupQuestions from './FollowupQuestions';
+import { jwtDecode } from 'jwt-decode';
 import './css/Questionnaire.css';
 
 const API_BASE_URL = 'http://localhost:5000/api/v1';
@@ -241,14 +242,37 @@ function Questionnaire() {
     
     const calculateFinalProfile = async () => {
       try {
+        const token = localStorage.getItem('jwt_token');
+          if (!token) {
+            setError('JWT token not found.');
+            return;
+          }
+          
+          let decoded;
+          try {
+            decoded = jwtDecode(token);
+          } catch (err) {
+            setError('Invalid token.');
+            return;
+          }
+        
+          // Extract the email from the decoded token (assuming it's nested under user)
+          const email = decoded.user?.email;
+            if (!email) {
+              setError('User email not found.');
+              return;
+            }
+
         const response = await axios.post(`${API_BASE_URL}/calculate_profile`, {
+          email: email,
           category_scores: categoryScores,
           followup_confidence: followupConfidence,
           user_responses: userResponses
         });
         
+        console.log(response.data);
         // Navigate to results page with profile ID
-        navigate(`/results/${response.data.profile_id}`);
+        navigate(`/results`);
       } catch (err) {
         setError('Error calculating your profile. Please try again.');
       }

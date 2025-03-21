@@ -8,8 +8,9 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), unique=True, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.now(timezone.utc))
-    onboarding_answers = db.Column(db.JSON, nullable=True)
+    user_profile = db.Column(db.JSON, nullable=True)
     portfolio = db.Column(db.JSON, nullable=True)
+
 
     def __repr__(self):
         return f'<User {self.email}>'

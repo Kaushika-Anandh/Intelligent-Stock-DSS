@@ -2,9 +2,10 @@ from flask import Blueprint, request, jsonify # type: ignore
 from auth import verify_firebase_token, create_jwt, decode_jwt
 from models import db, User, FolioQuestion, UserLog
 from sqlalchemy import MetaData, inspect # type: ignore
+from config import BEHAVIOR_CONTEXT
 import os
 import requests
-from llm_pipeline import get_desc_insights, chat_groq
+from llm_pipeline import get_desc_insights, chat_groq, chat_deepseek, fetch_open_close_tuples
 auth_bp = Blueprint('auth_bp', __name__)
 table_bp = Blueprint('table_bp', __name__)
 questions_bp = Blueprint('questions_bp', __name__)
@@ -395,13 +396,64 @@ def get_user_logs():
 
 @userlogs_bp.route('/news/sentiment-analysis/<ticker>', methods=['GET'])
 def get_ticker_news_sentiment(ticker):
+    email = request.args.get('email')
+    if not email:
+        return jsonify({"error": "email is required."}), 400
+    user = User.query.filter_by(email=email).first()
+    if not user:
+        return jsonify({"error": "user not found."}), 404
+    
+    user_portfolio = user.portfolio or {}
+    user_profile = user.user_profile or {}
+    try:
+        # Query the user_logs table filtering by email and order by activity_time (descending)
+        logs = UserLog.query.filter_by(email=email).order_by(UserLog.activity_time.desc()).all()
+        # Convert each log to a dictionary for JSON response
+        portfolio_logs = [{
+            "activity": log.activity,
+            "stock_ticker": log.stock_ticker,
+            "volume": log.volume,
+            "activity_time": log.activity_time.isoformat()  # Convert datetime to ISO format string
+        } for log in logs]
+        window_days100 = fetch_open_close_tuples(ticker, 100)
+
+    except Exception as e:
+        print(f"Error retrieving logs: {e}")
+        return jsonify({"error": f"Error retrieving logs: {str(e)}"}), 500
+
     try:
         output = get_desc_insights(ticker=ticker)
         if output:
             descriptions, news_insights, news_links = output
             llm_response = chat_groq(description=descriptions, insights=news_insights) 
-            return jsonify({"llm_response":llm_response, "news_links":news_links}), 200
-        
-        return jsonify({"error": "Error retrieving stock news:"}), 500
+
+            suggestion_response = chat_deepseek(
+                description=descriptions,
+                insights=news_insights,
+                portfolio=user_portfolio,
+                user_profile=user_profile,
+                portfolio_logs=portfolio_logs,
+                window_days=window_days100,
+                context=BEHAVIOR_CONTEXT
+            )
+
+            print("Formatted suggestion response:", suggestion_response)
+            
+            # Ensure the suggestion response has all required fields
+            if not suggestion_response:
+                suggestion_response = {
+                    "suggestion": "No suggestion available at this time.",
+                    "action": "hold",
+                    "units": 0,
+                    "reason": "Unable to generate a recommendation."
+                }
+                
+            return jsonify({
+                "llm_response": llm_response, 
+                "news_links": news_links, 
+                "suggestion": suggestion_response
+            }), 200
+        return jsonify({"error": "Error retrieving stock news"}), 500
     except Exception as e:
+        print(f"Error in sentiment analysis: {e}")
         return jsonify({"error": f"Error retrieving stock news: {str(e)}"}), 500
