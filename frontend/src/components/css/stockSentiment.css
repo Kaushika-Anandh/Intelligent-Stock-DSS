@@ -113,3 +113,39 @@
     text-decoration: underline;
   }
   
+/* Style the overall suggestion section */
+.suggestion-section {
+  border: 1px solid #ccc;
+  padding: 1rem;
+  margin: 1rem 0;
+  background-color: #fafafa;
+  border-radius: 4px;
+}
+
+/* Each decision container */
+.decision {
+  border: 1px solid #ddd;
+  padding: 1rem;
+  margin: 1rem 0;
+  border-radius: 4px;
+  background-color: #fff;
+}
+
+/* Headings and labels */
+.suggestion-section h4 {
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+}
+
+.decision p {
+  margin: 0.5rem 0;
+}
+
+/* Bold text as labels */
+.decision p strong {
+  display: inline-block;
+  min-width: 110px;
+  font-weight: bold;
+  color: #333;
+}
+

@@ -51,16 +51,16 @@ Steps:
 
 Rules:
 - Sell if downtrend, negative news, and loss tolerance shown in history.
-- Buy if uptrend, positive news, and risk tolerance per {user_profile["risk_tolerance"]}.
+- Buy if uptrend, positive news, and risk tolerance per {{user_profile["risk_tolerance"]}}.
 - Hold if signals conflict or user is conservative.
-- Limit suggestions to ≤20% per ticker unless {portfolio["concentration_ok"]} is true.
+- Limit suggestions to ≤20% per ticker unless {{portfolio["concentration_ok"]}} is true.
 
 Output only this JSON:
 {{
   "decisions": [
     {{
       "ticker": "TICKER",
-      "action": "buy/sell/hold",
+      "action": "BUY/SELL/HOLD",
       "units": integer,
       "suggestion": "Max 12-word summary",
       "reason": "[Technical] ... [News] ... [Behavior] ..."
@@ -76,7 +76,7 @@ Example:
       "action": "hold",  
       "units": 0,  
       "suggestion": "Await clearer signals post-earnings",  
-      "reason": "[Technical] RSI 68 (neutral); [News] {Insight_summary} mentions supply chain uncertainty; [Behavior] {user_analysis} shows aversion to earnings volatility"  
+      "reason": "[Technical] RSI 68 (neutral); [News] Insight_summary mentions supply chain uncertainty; [Behavior] user_analysis shows aversion to earnings volatility"  
     }}  
   ]  
 }} 

@@ -3,6 +3,7 @@ backend/storage
 frontend/src/components/firebase_config.js
 backend/.key
 backend/venv
+./core_questions.json
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies

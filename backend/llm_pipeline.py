@@ -3,13 +3,16 @@ from groq import Groq # type: ignore
 from config import NEWS_SUMMARY_USER_PROMPT, NEWS_SUMMARY_SYSTEM_PROMPT, SUGGESTION_CONTEXT_PROMPT, SUGGESTION_SYSTEM_PROMPT
 from langchain_groq import ChatGroq # type: ignore
 from langchain_core.prompts import ChatPromptTemplate # type: ignore
+import traceback
 
 def get_desc_insights(ticker):
 
     API_KEY = os.environ.get('POLYGONIO_KEY')
     url = f"https://api.polygon.io/v2/reference/news?ticker={ticker}&limit=3&apiKey={API_KEY}"
+    print(url)
     try:
         response = requests.get(url)
+        print(response)
         if response.status_code != 200:
             return False
         news_insights = []
@@ -56,27 +59,29 @@ def fetch_open_close_tuples(ticker, n_days):
     
     response = requests.get(url)
     if response.status_code != 200:
-        raise Exception(f"Error calling API: {response.text}")
+        return []
     
     data = response.json()
     results = data.get("results", [])
     return [(item["o"], item["c"]) for item in results if "o" in item and "c" in item]
+# NEWS_SUMMARY_SYSTEM_PROMPT
+# NEWS_SUMMARY_USER_PROMPT.format(DESCRIPTION = description, INSIGHTS = insights)
 
-def chat_groq(description, insights):
+def chat_groq(model_name, system_prompt, user_prompt):
     try:
         client = Groq(api_key=os.environ.get("GROQ_NEWS_SUMMARY_APU")) 
         chat_completion = client.chat.completions.create(
         messages=[
             {
                 "role": "system",
-                "content": NEWS_SUMMARY_SYSTEM_PROMPT
+                "content": system_prompt
             },
             {
                 "role": "user",
-                "content": NEWS_SUMMARY_USER_PROMPT.format(DESCRIPTION = description, INSIGHTS = insights),
+                "content": user_prompt
             }
         ],
-        model="llama-3.3-70b-versatile")
+        model=model_name)
 
         print(chat_completion.choices[0].message.content)
         llm_response = chat_completion.choices[0].message
@@ -89,7 +94,7 @@ def chat_groq(description, insights):
 def chat_deepseek(description, insights, portfolio, 
                   user_profile, portfolio_logs, 
                   window_days, context):
-    GROQ_API_KEY = os.environ.get("GROQ_API_KEY_V2")
+    GROQ_API_KEY = os.environ.get("GROQ_NEWS_SUMMARY_APU")
     try:
         llm = ChatGroq(
             model_name="deepseek-r1-distill-llama-70b",
@@ -104,7 +109,7 @@ def chat_deepseek(description, insights, portfolio,
                                                       portfolio_logs = portfolio_logs, window_days = window_days))
         ])
         response_chain = followup_prompt | llm
-        llm_response = response_chain.invoke()
+        llm_response = response_chain.invoke({})
         print("Raw LLM response:", llm_response.content)
         
         # More robust JSON extraction
@@ -147,6 +152,7 @@ def chat_deepseek(description, insights, portfolio,
                 "reason": "There was an error processing the market data."
             }
     except Exception as e:
+        print( traceback(e))
         print(f"Deepseek API error: {e}")
         # Return a properly structured response on any error
         return {
@@ -155,3 +161,4 @@ def chat_deepseek(description, insights, portfolio,
             "units": 0,
             "reason": f"Service error: {str(e)}"
         }
+    

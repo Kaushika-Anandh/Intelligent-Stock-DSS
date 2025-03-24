@@ -4,6 +4,7 @@ from config import Config
 from models import db 
 from routes import auth_bp, table_bp, questions_bp, portfolio_bp, userlogs_bp, suggestions_bp
 from followup_routes import followup_bp
+
 app = Flask(__name__)
 app.config.from_object(Config)
 CORS(app)
