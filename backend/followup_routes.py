@@ -65,7 +65,12 @@ followup_chain = followup_prompt | llm
 def load_questions(filepath="core_questions.json"):
     with open(filepath, "r") as f:
         return json.load(f)
+questions = load_questions()
 
+    # Group Questions by Category
+questions_by_category = {}
+for q in questions:
+    questions_by_category.setdefault(q["category"], []).append(q)
 # Define Order of Categories
 category_order = ["type_of_trader", "risk_appetite", "experience", "budget_appetite"]
 
@@ -177,12 +182,7 @@ def generate_followup(category, context_info):
 # API Endpoints
 @followup_bp.route('/questions', methods=['GET'])
 def get_questions():
-    questions = load_questions()
-
-    # Group Questions by Category
-    questions_by_category = {}
-    for q in questions:
-        questions_by_category.setdefault(q["category"], []).append(q)
+    
     """Return all questions grouped by category."""
     return jsonify({
         "questions_by_category": questions_by_category,
