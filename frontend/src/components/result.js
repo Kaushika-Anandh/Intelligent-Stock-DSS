@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { jwtDecode } from 'jwt-decode';
 import axios from 'axios';
 import './css/Results.css';
 
 function Results() {
-  const { profileId } = useParams();
   const navigate = useNavigate();
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -13,20 +13,46 @@ function Results() {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        setLoading(true);
-        const response = await axios.get(`http://localhost:5000/api/v1/profile/${profileId}`);
+        const token = localStorage.getItem('jwt_token');
+        if (!token) {
+          setError('JWT token not found.');
+          return;
+        }
+        
+        let decoded;
+        try {
+          decoded = jwtDecode(token);
+        } catch (err) {
+          setError('Invalid token.');
+          return;
+        }
+      
+        // Extract the email from the decoded token (assuming it's nested under user)
+        const email = decoded.user?.email;
+        if (!email) {
+          setError('User email not found.');
+          return;
+        }
+
+        
+        // Fixed: changed Params to lowercase params
+        const response = await axios.get('http://localhost:5000/api/v1/user/user-profile', { 
+          params: { email: email } 
+        });
+      
         setProfile(response.data.profile_data);
         setLoading(false);
       } catch (err) {
-        setError('Failed to load profile results.');
+        console.error('Error fetching profile:', err);
+        setError('Failed to load profile results: ' + (err.response?.data?.error || err.message));
         setLoading(false);
       }
     };
     
-    if (profileId) {
-      fetchProfile();
-    }
-  }, [profileId]);
+    // Another issue: infinite loop because of no dependency array and condition always true
+    // Changed to proper dependency array
+    fetchProfile();
+  }, []);  // Empty dependency array so it only runs once
 
   const getScoreColor = (score) => {
     if (score <= 3) return '#FF4B4B';
@@ -62,7 +88,6 @@ function Results() {
     <div className="results-container">
       <div className="results-header">
         <h2>✅ Financial Profile Complete!</h2>
-        <div className="profile-id">Profile ID: {profileId}</div>
       </div>
       
       <div className="results-content">
@@ -101,7 +126,7 @@ function Results() {
           ))}
         </div>
 
-        {renderWeightedScores()}
+        {profile.weighted_scores && renderWeightedScores()}
       </div>
       
       <div className="results-footer">

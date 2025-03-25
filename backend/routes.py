@@ -1,10 +1,11 @@
 from flask import Blueprint, request, jsonify # type: ignore
 from auth import verify_firebase_token, create_jwt, decode_jwt
-from models import db, User, FolioQuestion, UserLog
+from models import db, User, FolioQuestion, UserLog, OnboardingQuestions
 from sqlalchemy import MetaData, inspect # type: ignore
-import os
-import requests
-from llm_pipeline import get_desc_insights, chat_groq
+from config import BEHAVIOR_CONTEXT, NEWS_SUMMARY_USER_PROMPT, NEWS_SUMMARY_SYSTEM_PROMPT, SUGGESTION_SYSTEM_PROMPT, SUGGESTION_CONTEXT_PROMPT
+from llm_pipeline import get_desc_insights, chat_groq, chat_deepseek, fetch_open_close_tuples
+import json, traceback
+
 auth_bp = Blueprint('auth_bp', __name__)
 table_bp = Blueprint('table_bp', __name__)
 questions_bp = Blueprint('questions_bp', __name__)
@@ -31,7 +32,7 @@ def login():
     user_email = firebase_user.get('email')
     if not user_email:
         return jsonify({'error': 'Email not provided by Firebase'}), 400
-
+    get_questions()
     user = User.query.filter_by(email=user_email).first()
     if not user:
         # Create a new user record
@@ -125,7 +126,7 @@ def submit_onboarding():
     # Find the user by email
     user = User.query.filter_by(email=email).first()
     if not user:
-        return jsonify({"error": "user not found."}), 404
+        return jsonify({"error": "userr not found."}), 404
 
     # Update the user's onboarding answers column with the submitted answers
     user.onboarding_answers = answers
@@ -395,13 +396,110 @@ def get_user_logs():
 
 @userlogs_bp.route('/news/sentiment-analysis/<ticker>', methods=['GET'])
 def get_ticker_news_sentiment(ticker):
+    print(request.args)
+    email = request.args.get('email')
+    if not email:
+        return jsonify({"error": "email is required."}), 400
+    user = User.query.filter_by(email=email).first()
+    if not user:
+        return jsonify({"error": "user not found."}), 404
+    print("here")
+    user_portfolio = user.portfolio or {}
+    user_profile = user.user_profile or {}
+    print(user_portfolio, user_profile)
+    try:
+        # Query the user_logs table filtering by email and order by activity_time (descending)
+        logs = UserLog.query.filter_by(email=email).order_by(UserLog.activity_time.desc()).all()
+        # Convert each log to a dictionary for JSON response
+        portfolio_logs = [{
+            "activity": log.activity,
+            "stock_ticker": log.stock_ticker,
+            "volume": log.volume,
+            "activity_time": log.activity_time.isoformat()  # Convert datetime to ISO format string
+        } for log in logs]
+        window_days100 = fetch_open_close_tuples(ticker, 100)
+        print(window_days100)
+    except Exception as e:
+        print(f"Error retrieving logs: {e}")
+        return jsonify({"error": f"Error retrieving logs: {str(e)}"}), 500
+
     try:
         output = get_desc_insights(ticker=ticker)
+        # print(output)
         if output:
             descriptions, news_insights, news_links = output
-            llm_response = chat_groq(description=descriptions, insights=news_insights) 
-            return jsonify({"llm_response":llm_response, "news_links":news_links}), 200
-        
-        return jsonify({"error": "Error retrieving stock news:"}), 500
+            llm_response = chat_groq(model_name= "deepseek-r1-distill-llama-70b",  user_prompt=NEWS_SUMMARY_USER_PROMPT.format(DESCRIPTION = descriptions, INSIGHTS = news_insights), system_prompt=NEWS_SUMMARY_SYSTEM_PROMPT) 
+            print(llm_response)
+            dss_user_prompt = SUGGESTION_CONTEXT_PROMPT.format(Description_summary = descriptions, Insight_summary = news_insights, portfolio = user_portfolio, 
+                                                      user_profile = user_profile, context = BEHAVIOR_CONTEXT, 
+                                                      portfolio_logs = portfolio_logs, window_days = window_days100)
+            suggestion_response = chat_groq(model_name= "deepseek-r1-distill-llama-70b",  user_prompt=dss_user_prompt, system_prompt=SUGGESTION_SYSTEM_PROMPT)
+            print("Formatted suggestion response:", suggestion_response)
+            
+            # Ensure the suggestion response has all required fields
+            if not suggestion_response:
+                suggestion_response = {
+                    "suggestion": "No suggestion available at this time.",
+                    "action": "hold",
+                    "units": 0,
+                    "reason": "Unable to generate a recommendation."
+                }
+                
+            return jsonify({
+                "llm_response": llm_response, 
+                "news_links": news_links, 
+                "suggestion": suggestion_response
+            }), 200
+        return jsonify({"error": "Error retrieving stock news"}), 500
     except Exception as e:
+        traceback(e)
+        print(f"Error in sentiment analysis: {e}")
         return jsonify({"error": f"Error retrieving stock news: {str(e)}"}), 500
+    
+@questions_bp.route('/fetch/questions', methods=['GET'])
+def get_questions():
+    questions = OnboardingQuestions.query.all()
+    
+    # Convert query results to JSON format
+    questions_data = [{
+        'id': q.id,
+        'question': q.question,
+        'category': q.category,
+        'options': q.options
+    } for q in questions]
+    
+    # Save JSON to a local file
+    with open("core_questions.json", "w", encoding="utf-8") as file:
+        json.dump(questions_data, file, indent=4)
+    
+    return jsonify(questions_data)
+
+@questions_bp.route('/post/questions', methods=['POST'])
+def add_questions():
+    if not request.is_json:
+        return jsonify({"error": "Request must be JSON"}), 400
+
+    data = request.get_json()
+    if not isinstance(data, list):
+        return jsonify({"error": "Request payload must be a list of JSON objects"}), 400
+
+    new_questions = []
+    for item in data:
+        question = item.get('question')
+        category = item.get('category')
+        options = item.get('options')
+
+        if not question or not category:
+            return jsonify({"error": "Each question must have a 'question' and 'category' field"}), 400
+
+        new_question = OnboardingQuestions(
+            question=question,
+            category=category,
+            options=options
+        )
+        new_questions.append(new_question)
+
+    db.session.bulk_save_objects(new_questions)
+    db.session.commit()
+
+    return jsonify({"message": f"{len(new_questions)} questions added successfully"}), 201

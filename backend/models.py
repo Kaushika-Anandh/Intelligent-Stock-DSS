@@ -8,7 +8,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), unique=True, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.now(timezone.utc))
-    onboarding_answers = db.Column(db.JSON, nullable=True)
+    user_profile = db.Column(db.JSON, nullable=True)
     portfolio = db.Column(db.JSON, nullable=True)
 
     def __repr__(self):
@@ -34,3 +34,21 @@ class UserLog(db.Model):
 
     def __repr__(self):
         return f"<UserLog {self.log_id} - {self.email} - {self.activity}>"
+    
+class OnboardingQuestions(db.Model):
+    __tablename__ = 'onboarding_questions'
+    id = db.Column(db.Integer, primary_key=True)
+    question = db.Column(db.String(120), nullable=False)
+    category = db.Column(db.String(50), nullable=False)
+    options = db.Column(db.JSON, nullable=True)
+
+    # "id": "CQ1",
+    #   "question": "How long do you typically hold stocks?",
+    #   "category": "type_of_trader",
+    #   "options": [
+    #     {"option": "Seconds/minutes (Scalper)", "score": 10},
+    #     {"option": "Intraday (Day Trader)", "score": 8},
+    #     {"option": "Days to weeks (Swing)", "score": 6},
+    #     {"option": "Months (Position)", "score": 4},
+    #     {"option": "Years (Investor)", "score": 2}
+    #   ]

@@ -1,227 +1,461 @@
 [
     {
-      "id": "CQ1",
-      "question": "How long do you typically hold stocks?",
-      "category": "type_of_trader",
-      "options": [
-        {"option": "Seconds/minutes (Scalper)", "score": 10},
-        {"option": "Intraday (Day Trader)", "score": 8},
-        {"option": "Days to weeks (Swing)", "score": 6},
-        {"option": "Months (Position)", "score": 4},
-        {"option": "Years (Investor)", "score": 2}
-      ]
+        "id": 1,
+        "question": "How long do you typically hold stocks?",
+        "category": "type_of_trader",
+        "options": [
+            {
+                "option": "Seconds/minutes (Scalper)",
+                "score": 10
+            },
+            {
+                "option": "Intraday (Day Trader)",
+                "score": 8
+            },
+            {
+                "option": "Days to weeks (Swing)",
+                "score": 6
+            },
+            {
+                "option": "Months (Position)",
+                "score": 4
+            },
+            {
+                "option": "Years (Investor)",
+                "score": 2
+            }
+        ]
     },
     {
-      "id": "CQ2",
-      "question": "Your primary analysis method?",
-      "category": "type_of_trader",
-      "options": [
-        {"option": "Pure technical (charts, RSI)", "score": 10},
-        {"option": "Technical for entry, fundamental for exit", "score": 7},
-        {"option": "Fundamental (DCF, ratios)", "score": 5},
-        {"option": "News/sentiment", "score": 3}
-      ]
+        "id": 2,
+        "question": "Your primary analysis method?",
+        "category": "type_of_trader",
+        "options": [
+            {
+                "option": "Pure technical (charts, RSI)",
+                "score": 10
+            },
+            {
+                "option": "Technical for entry, fundamental for exit",
+                "score": 7
+            },
+            {
+                "option": "Fundamental (DCF, ratios)",
+                "score": 5
+            },
+            {
+                "option": "News/sentiment",
+                "score": 3
+            }
+        ]
     },
     {
-      "id": "CQ3",
-      "question": "How often do you trade futures/options?",
-      "category": "type_of_trader",
-      "options": [
-        {"option": "Daily (F&O specialist)", "score": 10},
-        {"option": "Weekly (earnings/events)", "score": 7},
-        {"option": "Rarely", "score": 4},
-        {"option": "Never", "score": 2}
-      ]
+        "id": 3,
+        "question": "How often do you trade futures/options?",
+        "category": "type_of_trader",
+        "options": [
+            {
+                "option": "Daily (F&O specialist)",
+                "score": 10
+            },
+            {
+                "option": "Weekly (earnings/events)",
+                "score": 7
+            },
+            {
+                "option": "Rarely",
+                "score": 4
+            },
+            {
+                "option": "Never",
+                "score": 2
+            }
+        ]
     },
     {
-      "id": "CQ4",
-      "question": "For Reliance before results, you...",
-      "category": "type_of_trader",
-      "options": [
-        {"option": "Trade straddles/strangles", "score": 10},
-        {"option": "Swing trade volatility", "score": 8},
-        {"option": "Hold through earnings", "score": 4},
-        {"option": "Exit pre-results", "score": 2}
-      ]
+        "id": 4,
+        "question": "For Reliance before results, you...",
+        "category": "type_of_trader",
+        "options": [
+            {
+                "option": "Trade straddles/strangles",
+                "score": 10
+            },
+            {
+                "option": "Swing trade volatility",
+                "score": 8
+            },
+            {
+                "option": "Hold through earnings",
+                "score": 4
+            },
+            {
+                "option": "Exit pre-results",
+                "score": 2
+            }
+        ]
     },
     {
-      "id": "CQ5",
-      "question": "Frequency of holding stocks overnight?",
-      "category": "type_of_trader",
-      "options": [
-        {"option": "Never (strict day trader)", "score": 10},
-        {"option": "1–2 times/week", "score": 7},
-        {"option": "Weekly", "score": 5},
-        {"option": "Monthly", "score": 3}
-      ]
+        "id": 5,
+        "question": "Frequency of holding stocks overnight?",
+        "category": "type_of_trader",
+        "options": [
+            {
+                "option": "Never (strict day trader)",
+                "score": 10
+            },
+            {
+                "option": "1\u20132 times/week",
+                "score": 7
+            },
+            {
+                "option": "Weekly",
+                "score": 5
+            },
+            {
+                "option": "Monthly",
+                "score": 3
+            }
+        ]
     },
     {
-      "id": "CQ6",
-      "question": "Margin trading frequency?",
-      "category": "risk_appetite",
-      "options": [
-        {"option": "50%+ portfolio", "score": 10},
-        {"option": "20–30%", "score": 8},
-        {"option": "<10%", "score": 5},
-        {"option": "Never", "score": 2}
-      ]
+        "id": 6,
+        "question": "Margin trading frequency?",
+        "category": "risk_appetite",
+        "options": [
+            {
+                "option": "50%+ portfolio",
+                "score": 10
+            },
+            {
+                "option": "20\u201330%",
+                "score": 8
+            },
+            {
+                "option": "<10%",
+                "score": 5
+            },
+            {
+                "option": "Never",
+                "score": 2
+            }
+        ]
     },
     {
-      "id": "CQ7",
-      "question": "Exposure to stocks like Tata Elxsi?",
-      "category": "risk_appetite",
-      "options": [
-        {"option": "30%+", "score": 10},
-        {"option": "10–20%", "score": 8},
-        {"option": "<5%", "score": 4},
-        {"option": "Avoid", "score": 2}
-      ]
+        "id": 7,
+        "question": "Exposure to stocks like Tata Elxsi?",
+        "category": "risk_appetite",
+        "options": [
+            {
+                "option": "30%+",
+                "score": 10
+            },
+            {
+                "option": "10\u201320%",
+                "score": 8
+            },
+            {
+                "option": "<5%",
+                "score": 4
+            },
+            {
+                "option": "Avoid",
+                "score": 2
+            }
+        ]
     },
     {
-      "id": "CQ8",
-      "question": "If Nifty drops 30% (2008-style), you...",
-      "category": "risk_appetite",
-      "options": [
-        {"option": "Short index futures", "score": 10},
-        {"option": "Buy leveraged ETFs", "score": 8},
-        {"option": "Hold bluechips (HDFC Bank)", "score": 5},
-        {"option": "Exit equities", "score": 2}
-      ]
+        "id": 8,
+        "question": "If Nifty drops 30% (2008-style), you...",
+        "category": "risk_appetite",
+        "options": [
+            {
+                "option": "Short index futures",
+                "score": 10
+            },
+            {
+                "option": "Buy leveraged ETFs",
+                "score": 8
+            },
+            {
+                "option": "Hold bluechips (HDFC Bank)",
+                "score": 5
+            },
+            {
+                "option": "Exit equities",
+                "score": 2
+            }
+        ]
     },
     {
-      "id": "CQ9",
-      "question": "Allocation to stocks < ₹50/share?",
-      "category": "risk_appetite",
-      "options": [
-        {"option": "20%+", "score": 10},
-        {"option": "5–10%", "score": 7},
-        {"option": "Avoid", "score": 2}
-      ]
+        "id": 9,
+        "question": "Allocation to stocks < \u20b950/share?",
+        "category": "risk_appetite",
+        "options": [
+            {
+                "option": "20%+",
+                "score": 10
+            },
+            {
+                "option": "5\u201310%",
+                "score": 7
+            },
+            {
+                "option": "Avoid",
+                "score": 2
+            }
+        ]
     },
     {
-      "id": "CQ10",
-      "question": "Max loss before exiting a trade?",
-      "category": "risk_appetite",
-      "options": [
-        {"option": "20%+", "score": 10},
-        {"option": "10–15%", "score": 7},
-        {"option": "5%", "score": 3}
-      ]
+        "id": 10,
+        "question": "Max loss before exiting a trade?",
+        "category": "risk_appetite",
+        "options": [
+            {
+                "option": "20%+",
+                "score": 10
+            },
+            {
+                "option": "10\u201315%",
+                "score": 7
+            },
+            {
+                "option": "5%",
+                "score": 3
+            }
+        ]
     },
     {
-      "id": "CQ11",
-      "question": "Can you explain 'gamma squeeze'?",
-      "category": "experience",
-      "options": [
-        {"option": "Yes, traded it", "score": 10},
-        {"option": "Basic understanding", "score": 6},
-        {"option": "Heard the term", "score": 3},
-        {"option": "No", "score": 1}
-      ]
+        "id": 11,
+        "question": "Can you explain 'gamma squeeze'?",
+        "category": "experience",
+        "options": [
+            {
+                "option": "Yes, traded it",
+                "score": 10
+            },
+            {
+                "option": "Basic understanding",
+                "score": 6
+            },
+            {
+                "option": "Heard the term",
+                "score": 3
+            },
+            {
+                "option": "No",
+                "score": 1
+            }
+        ]
     },
     {
-      "id": "CQ12",
-      "question": "How do you compare TCS vs Infosys?",
-      "category": "experience",
-      "options": [
-        {"option": "DCF + ROE", "score": 10},
-        {"option": "P/E ratios", "score": 7},
-        {"option": "News trends", "score": 4},
-        {"option": "Don’t analyze", "score": 1}
-      ]
+        "id": 12,
+        "question": "How do you compare TCS vs Infosys?",
+        "category": "experience",
+        "options": [
+            {
+                "option": "DCF + ROE",
+                "score": 10
+            },
+            {
+                "option": "P/E ratios",
+                "score": 7
+            },
+            {
+                "option": "News trends",
+                "score": 4
+            },
+            {
+                "option": "Don\u2019t analyze",
+                "score": 1
+            }
+        ]
     },
     {
-      "id": "CQ13",
-      "question": "IPOs applied to in 2023?",
-      "category": "experience",
-      "options": [
-        {"option": "10+", "score": 10},
-        {"option": "5–9", "score": 7},
-        {"option": "1–4", "score": 4},
-        {"option": "None", "score": 1}
-      ]
+        "id": 13,
+        "question": "IPOs applied to in 2023?",
+        "category": "experience",
+        "options": [
+            {
+                "option": "10+",
+                "score": 10
+            },
+            {
+                "option": "5\u20139",
+                "score": 7
+            },
+            {
+                "option": "1\u20134",
+                "score": 4
+            },
+            {
+                "option": "None",
+                "score": 1
+            }
+        ]
     },
     {
-      "id": "CQ14",
-      "question": "Handled Tata Motors’ 2022 stock split by...",
-      "category": "experience",
-      "options": [
-        {"option": "Adjusted strategy", "score": 10},
-        {"option": "Held", "score": 5},
-        {"option": "Didn't notice", "score": 1}
-      ]
+        "id": 14,
+        "question": "Handled Tata Motors\u2019 2022 stock split by...",
+        "category": "experience",
+        "options": [
+            {
+                "option": "Adjusted strategy",
+                "score": 10
+            },
+            {
+                "option": "Held",
+                "score": 5
+            },
+            {
+                "option": "Didn't notice",
+                "score": 1
+            }
+        ]
     },
     {
-      "id": "CQ15",
-      "question": "Circuit filter rules?",
-      "category": "experience",
-      "options": [
-        {"option": "Detailed knowledge", "score": 10},
-        {"option": "Basic", "score": 6},
-        {"option": "Rely on broker", "score": 2}
-      ]
+        "id": 15,
+        "question": "Circuit filter rules?",
+        "category": "experience",
+        "options": [
+            {
+                "option": "Detailed knowledge",
+                "score": 10
+            },
+            {
+                "option": "Basic",
+                "score": 6
+            },
+            {
+                "option": "Rely on broker",
+                "score": 2
+            }
+        ]
     },
     {
-      "id": "CQ16",
-      "question": "Amount allocated to equities?",
-      "category": "budget_appetite",
-      "options": [
-        {"option": "₹10L+", "score": 10},
-        {"option": "₹2–5L", "score": 7},
-        {"option": "₹50K–2L", "score": 5},
-        {"option": "<₹50K", "score": 2}
-      ]
+        "id": 16,
+        "question": "Amount allocated to equities?",
+        "category": "budget_appetite",
+        "options": [
+            {
+                "option": "\u20b910L+",
+                "score": 10
+            },
+            {
+                "option": "\u20b92\u20135L",
+                "score": 7
+            },
+            {
+                "option": "\u20b950K\u20132L",
+                "score": 5
+            },
+            {
+                "option": "<\u20b950K",
+                "score": 2
+            }
+        ]
     },
     {
-      "id": "CQ17",
-      "question": "Monthly equity additions?",
-      "category": "budget_appetite",
-      "options": [
-        {"option": "₹50K+", "score": 10},
-        {"option": "₹25–50K", "score": 7},
-        {"option": "₹10–25K", "score": 5},
-        {"option": "None", "score": 2}
-      ]
+        "id": 17,
+        "question": "Monthly equity additions?",
+        "category": "budget_appetite",
+        "options": [
+            {
+                "option": "\u20b950K+",
+                "score": 10
+            },
+            {
+                "option": "\u20b925\u201350K",
+                "score": 7
+            },
+            {
+                "option": "\u20b910\u201325K",
+                "score": 5
+            },
+            {
+                "option": "None",
+                "score": 2
+            }
+        ]
     },
     {
-      "id": "CQ18",
-      "question": "6 months' expenses saved?",
-      "category": "budget_appetite",
-      "options": [
-        {"option": "Yes (FDs/liquid)", "score": 10},
-        {"option": "Partial", "score": 5},
-        {"option": "No (all in equity)", "score": 2}
-      ]
+        "id": 18,
+        "question": "6 months' expenses saved?",
+        "category": "budget_appetite",
+        "options": [
+            {
+                "option": "Yes (FDs/liquid)",
+                "score": 10
+            },
+            {
+                "option": "Partial",
+                "score": 5
+            },
+            {
+                "option": "No (all in equity)",
+                "score": 2
+            }
+        ]
     },
     {
-      "id": "CQ19",
-      "question": "If you inherit ₹50L, equity allocation?",
-      "category": "budget_appetite",
-      "options": [
-        {"option": "75%+", "score": 10},
-        {"option": "50%", "score": 7},
-        {"option": "<25%", "score": 2}
-      ]
+        "id": 19,
+        "question": "If you inherit \u20b950L, equity allocation?",
+        "category": "budget_appetite",
+        "options": [
+            {
+                "option": "75%+",
+                "score": 10
+            },
+            {
+                "option": "50%",
+                "score": 7
+            },
+            {
+                "option": "<25%",
+                "score": 2
+            }
+        ]
     },
     {
-      "id": "CQ20",
-      "question": "Why use leverage?",
-      "category": "budget_appetite",
-      "options": [
-        {"option": "Short-term gains", "score": 10},
-        {"option": "Hedge", "score": 7},
-        {"option": "Never", "score": 2}
-      ]
+        "id": 20,
+        "question": "Why use leverage?",
+        "category": "budget_appetite",
+        "options": [
+            {
+                "option": "Short-term gains",
+                "score": 10
+            },
+            {
+                "option": "Hedge",
+                "score": 7
+            },
+            {
+                "option": "Never",
+                "score": 2
+            }
+        ]
     },
     {
-      "id": "CQ21",
-      "question": "If Nifty swings ±3% daily, you...",
-      "category": "type_of_trader",
-      "options": [
-        {"option": "Trade reversals (Scalping)", "score": 10},
-        {"option": "Use stop-loss for day trades", "score": 8},
-        {"option": "Hold quality stocks", "score": 4},
-        {"option": "Avoid trading", "score": 2}
-      ]
+        "id": 21,
+        "question": "If Nifty swings \u00b13% daily, you...",
+        "category": "type_of_trader",
+        "options": [
+            {
+                "option": "Trade reversals (Scalping)",
+                "score": 10
+            },
+            {
+                "option": "Use stop-loss for day trades",
+                "score": 8
+            },
+            {
+                "option": "Hold quality stocks",
+                "score": 4
+            },
+            {
+                "option": "Avoid trading",
+                "score": 2
+            }
+        ]
     }
-  ]
+]
